@@ -474,16 +474,14 @@ def flatten_for_csv(record: dict):
 # -----------------------------
 # MAIN BATCH RUN
 # -----------------------------
-def process_file(html_file: Path):
+def process_file(html_file: Path, json_dir: Path):
     """Helper to parse a single file and save its JSON."""
     try:
         rec = parse_nsf_html(html_file)
-        with open(JSON_DIR / f"{html_file.stem}.json", "w", encoding="utf-8") as f:
+        with open(json_dir / f"{html_file.stem}.json", "w", encoding="utf-8") as f:
             json.dump(rec, f, ensure_ascii=False, indent=2)
         return rec
     except Exception as e:
-        # We can't easily print here without breaking the progress bar, 
-        # but we can return None or log it elsewhere.
         return None
 
 def run_batch_parsing(input_dir: Path, out_dir: Path, json_dir: Path):
@@ -508,7 +506,7 @@ def run_batch_parsing(input_dir: Path, out_dir: Path, json_dir: Path):
         
         with ThreadPoolExecutor() as executor:
             # map maintains order, but we can also use as_completed
-            futures = [executor.submit(process_file, f) for f in html_files]
+            futures = [executor.submit(process_file, f, json_dir) for f in html_files]
             for future in futures:
                 res = future.result()
                 if res:

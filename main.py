@@ -30,6 +30,15 @@ def run_url_workflow(url: str, out_dir: Path):
     json_dir = out_dir / "json"
     parse_html.run_batch_parsing(html_out, out_dir, json_dir)
     
+    # 3. Cleanup
+    console.print(f"[dim]→ Cleaning up intermediate files in {html_out}...[/dim]")
+    robust_rmtree(html_out)
+    
+    # Also cleanup results.jsonl if it exists
+    results_file = Path("results.jsonl")
+    if results_file.exists():
+        results_file.unlink()
+
     console.print(f"\n[bold green]✓ Done! Results in {out_dir}[/bold green]")
 
 def robust_rmtree(path: Path):

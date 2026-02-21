@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup, Tag
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 
 # -----------------------------
-# CONFIG
+# CONFIG (DEFAULTS)
 # -----------------------------
 INPUT_DIR = Path("html_out")
 OUT_DIR = Path("out")
